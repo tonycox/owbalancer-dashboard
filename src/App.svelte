@@ -9,7 +9,7 @@
 	import {
 		currentArchiveStore,
 		archiveIdListStore,
-		loadAllArchives,
+		reloadArchive,
 	} from "./func/store";
 	import { currentUserStore } from "./func/auth";
 
@@ -30,9 +30,7 @@
 	});
 
 	onMount(() => {
-		loadAllArchives().then((result) => {
-			currentArchiveStore.set(result[0]);
-		});
+		reloadArchive(null);
 	});
 </script>
 
@@ -44,5 +42,5 @@
 		{availableIdList}
 		{isAdmin}
 	/>
-	<TeamGrid teams={archive.data.teams} finalist={archive.finalist} />
+	<TeamGrid teams={archive.data.teams} />
 {/if}

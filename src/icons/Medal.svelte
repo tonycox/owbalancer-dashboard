@@ -1,8 +1,8 @@
 <script>
-    export let placement;
+    export let place;
 
     function findImage() {
-        switch (placement) {
+        switch (place) {
             case 1:
                 return "/medals/gold.png";
             case 2:

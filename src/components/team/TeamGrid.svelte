@@ -3,13 +3,12 @@
 	import { sortByFinalists, adjustPlacementBorder } from ".";
 
 	export let teams;
-	export let finalist;
 
 </script>
 
 <div class="teams-grid">
 	{#if teams}
-		{#each sortByFinalists(teams, finalist) as team}
+		{#each sortByFinalists(teams) as team}
 			<Team team={adjustPlacementBorder(team)} />
 		{/each}
 	{/if}

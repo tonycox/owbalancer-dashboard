@@ -4,13 +4,14 @@
     import { sortByRole } from ".";
     
     export let team;
+    
 </script>
 
 <div class="team {team.border_class}">
     <div class="team-name">
         <h2>{team.name}</h2>
-        {#key team}
-            <Medal placement={team.place} />
+        {#key team.name}
+            <Medal place={team.place} />
         {/key}
     </div>
     <ul>

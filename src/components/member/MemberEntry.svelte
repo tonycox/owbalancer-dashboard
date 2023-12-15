@@ -1,6 +1,6 @@
 <script>
     import Division from "../../icons/Division.svelte";
-    import { getMemberInfo } from "../../func/store.js";
+    import { getMemberInfo } from "../../func/statistics.js";
     import { getRoleIcon } from ".";
     import MemberModal from "./MemberModal.svelte";
 

@@ -1,7 +1,7 @@
 <script>
     export let team;
 
-    import Member from "./Member.svelte";
+    import MemberEntry from "./member/MemberEntry.svelte";
 
     const roleOrder = {
         tank: 1,
@@ -26,7 +26,7 @@
         </li>
         {#each sortByRole(team.members) as member}
             <li>
-                <Member {member} />
+                <MemberEntry {member} />
             </li>
         {/each}
     </ul>

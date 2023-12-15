@@ -2,11 +2,9 @@
 	import { onMount } from "svelte";
 	import { is_empty } from "svelte/internal";
 
-	import ButtonGroup from "./components/ButtonGroup.svelte";
-	import TeamGrid from "./components/TeamGrid.svelte";
-	import SaveTournament from "./components/SaveTournament.svelte";
-	import LoginModal from "./components/LoginModal.svelte";
 	import InfoHeader from "./components/InfoHeader.svelte";
+	import MainMenu from "./components/menu/MainMenu.svelte";
+	import TeamGrid from "./components/TeamGrid.svelte";
 
 	import {
 		currentArchiveStore,
@@ -16,16 +14,8 @@
 	import { currentUser } from "./func/auth";
 
 	let archive;
-	let curentArchiveId;
-	let curentArchiveDate;
 	let availableIdList = [];
 	let isAdmin = false;
-
-	let isSaveModalOpen = false;
-	const saveToggle = () => (isSaveModalOpen = !isSaveModalOpen);
-
-	let isLoginModalOpen = false;
-	const loginToggle = () => (isLoginModalOpen = !isLoginModalOpen);
 
 	currentUser.subscribe((value) => {
 		if (!is_empty(value)) {
@@ -35,10 +25,6 @@
 
 	currentArchiveStore.subscribe((value) => {
 		archive = value;
-		if (!is_empty(value)) {
-			curentArchiveId = value.id;
-			curentArchiveDate = value.data.date;
-		}
 	});
 	archiveIdListStore.subscribe((value) => {
 		availableIdList = value;
@@ -57,17 +43,11 @@
 
 <InfoHeader />
 
-<SaveTournament {archive} isOpen={isSaveModalOpen} toggle={saveToggle} />
-<LoginModal isOpen={isLoginModalOpen} toggle={loginToggle} />
-
-<ButtonGroup
-	{availableIdList}
-	{curentArchiveId}
-	{curentArchiveDate}
-	{isAdmin}
-	initSignIn={loginToggle}
-	initSaving={saveToggle}
-/>
 {#if archive.data}
+	<MainMenu
+		{archive}
+		{availableIdList}
+		{isAdmin}
+	/>
 	<TeamGrid teams={archive.data.teams} finalist={archive.finalist} />
 {/if}

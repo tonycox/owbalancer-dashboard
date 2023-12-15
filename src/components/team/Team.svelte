@@ -1,10 +1,10 @@
 <script>
-    import MemberEntry from "../member/MemberEntry.svelte";
+    import MemberContainer from "../member/MemberContainer.svelte";
     import Medal from "../../icons/Medal.svelte";
     import { sortByRole } from ".";
     
     export let team;
-    
+
 </script>
 
 <div class="team {team.border_class}">
@@ -24,7 +24,7 @@
         </li>
         {#each sortByRole(team.members) as member}
             <li>
-                <MemberEntry {member} />
+                <MemberContainer {member} />
             </li>
         {/each}
     </ul>

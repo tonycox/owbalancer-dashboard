@@ -29,6 +29,10 @@ async function loadArchive(tourName) {
 
 let archiveCache = {};
 
+function unsafeRetrieveArchive(id) {
+	return archiveCache[id];
+}
+
 function reloadArchive(id) {
 	if (id in archiveCache) {
 		currentArchiveStore.set(archiveCache[id]);
@@ -84,5 +88,6 @@ export {
 	reloadArchive,
 	saveArchive,
 	importArchive,
-	loadAllArchives
+	loadAllArchives,
+	unsafeRetrieveArchive
 };

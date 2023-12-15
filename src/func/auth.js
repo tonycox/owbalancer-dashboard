@@ -10,7 +10,7 @@ setPersistence(auth, browserLocalPersistence)
 
 async function initUser() {
     if (auth.currentUser != null) {
-        currentUser.set(auth.currentUser);
+        currentUserStore.set(auth.currentUser);
     }
 }
 
@@ -22,8 +22,8 @@ async function signIn(email, password) {
         })
 }
 
-const currentUser = writable(
+const currentUserStore = writable(
     {}
 );
 
-export { signIn, currentUser };
+export { signIn, currentUserStore };

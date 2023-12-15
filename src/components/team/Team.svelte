@@ -1,21 +1,18 @@
 <script>
+    import MemberEntry from "../member/MemberEntry.svelte";
+    import Medal from "../../icons/Medal.svelte";
+    import { sortByRole } from ".";
+    
     export let team;
-
-    import MemberEntry from "./member/MemberEntry.svelte";
-
-    const roleOrder = {
-        tank: 1,
-        dps: 2,
-        support: 3,
-    };
-
-    function sortByRole(members) {
-        return members.sort((a, b) => roleOrder[a.role] - roleOrder[b.role]);
-    }
 </script>
 
 <div class="team {team.border_class}">
-    <h2>{team.name}</h2>
+    <div class="team-name">
+        <h2>{team.name}</h2>
+        {#key team}
+            <Medal placement={team.place} />
+        {/key}
+    </div>
     <ul>
         <li>
             <div>
@@ -33,6 +30,11 @@
 </div>
 
 <style>
+    .team-name {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
     .team {
         display: inline-block;
         border: 1px solid #ccc;

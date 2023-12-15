@@ -1,6 +1,6 @@
 <script>
     import { Modal, Table } from "sveltestrap";
-    import Division from "../Division.svelte";
+    import Division from "../../icons/Division.svelte";
     import { formatDate } from "../../func/dates.js";
     import { getRoleIcon } from ".";
 

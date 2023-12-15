@@ -1,27 +1,23 @@
 <script>
-    import Division from "../Division.svelte";
+    import Division from "../../icons/Division.svelte";
     import { getMemberInfo } from "../../func/store.js";
     import { getRoleIcon } from ".";
     import MemberModal from "./MemberModal.svelte";
 
     export let member;
 
-    let memberInfo;
     let isModelOpen = false;
-    const toggleModal = () => {
-        isModelOpen = !isModelOpen;
-        memberInfo = getMemberInfo(member.name);
-    };
+    const toggleModal = () => (isModelOpen = !isModelOpen)
 </script>
 
-{#if memberInfo}
-    <MemberModal {memberInfo} {isModelOpen} {toggleModal} />
+{#if member}
+    <MemberModal memberInfo={getMemberInfo(member.name)} {isModelOpen} {toggleModal} />
 {/if}
 
 {#if member}
     <div class="member" on:mousedown={toggleModal}>
         <svelte:component this={getRoleIcon(member.role)} />
-        {#key member.rank}
+        {#key member.name}
             <Division rank={member.rank} />
         {/key}
         {member.name}

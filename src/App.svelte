@@ -4,25 +4,24 @@
 
 	import InfoHeader from "./components/InfoHeader.svelte";
 	import MainMenu from "./components/menu/MainMenu.svelte";
-	import TeamGrid from "./components/TeamGrid.svelte";
+	import TeamGrid from "./components/team/TeamGrid.svelte";
 
 	import {
 		currentArchiveStore,
 		archiveIdListStore,
 		loadAllArchives,
 	} from "./func/store";
-	import { currentUser } from "./func/auth";
+	import { currentUserStore } from "./func/auth";
 
 	let archive;
 	let availableIdList = [];
 	let isAdmin = false;
 
-	currentUser.subscribe((value) => {
+	currentUserStore.subscribe((value) => {
 		if (!is_empty(value)) {
 			isAdmin = true;
 		}
 	});
-
 	currentArchiveStore.subscribe((value) => {
 		archive = value;
 	});
@@ -30,13 +29,9 @@
 		availableIdList = value;
 	});
 
-	const setInitialCurrent = (list) => {
-		currentArchiveStore.set(list[0]);
-	};
-
 	onMount(() => {
 		loadAllArchives().then((result) => {
-			setInitialCurrent(result);
+			currentArchiveStore.set(result[0]);
 		});
 	});
 </script>

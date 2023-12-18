@@ -8,8 +8,16 @@ function sortByRole(members) {
     return members.sort((a, b) => roleOrder[a.role] - roleOrder[b.role]);
 }
 
-function sortByFinalists(teams) {
-    return teams.sort((a, b) => a.place - b.place);
+function sortByPlace(teams) {
+    return teams.sort((a, b) => {
+        if (a.place === null) {
+            return 1;
+        }
+        if (b.place === null) {
+            return -1;
+        }
+        return a.place - b.place
+    });
 }
 
 function adjustPlacementBorder(team) {
@@ -31,6 +39,6 @@ function adjustPlacementBorder(team) {
 
 export {
     sortByRole,
-    sortByFinalists,
+    sortByPlace,
     adjustPlacementBorder
 }

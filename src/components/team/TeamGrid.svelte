@@ -1,6 +1,6 @@
 <script>
 	import Team from "./Team.svelte";
-	import { sortByFinalists, adjustPlacementBorder } from ".";
+	import { sortByPlace, adjustPlacementBorder } from ".";
 
 	export let teams;
 
@@ -8,7 +8,7 @@
 
 <div class="teams-grid">
 	{#if teams}
-		{#each sortByFinalists(teams) as team}
+		{#each sortByPlace(teams) as team}
 			<Team team={adjustPlacementBorder(team)} />
 		{/each}
 	{/if}

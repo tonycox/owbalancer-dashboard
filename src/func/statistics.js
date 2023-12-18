@@ -1,5 +1,3 @@
-import { is_empty } from "svelte/internal";
-
 class ExtendedMap extends Map {
     get(key) {
         if (!this.has(key)) {
@@ -21,29 +19,6 @@ let memberStatistcsCache = new ExtendedMap(() => {
     }
 });
 
-function lookupTeam(placeName, finalist) {
-    if (placeName in finalist) {
-        return finalist[placeName];
-    } else {
-        return null;
-    }
-}
-
-function identifyPlace(teamName, finalist) {
-    if (is_empty(finalist)) {
-        return 4;
-    }
-    if (teamName == lookupTeam("first_place", finalist)) {
-        return 1;
-    } else if (teamName == lookupTeam("second_place", finalist)) {
-        return 2;
-    } else if (teamName == lookupTeam("third_place", finalist)) {
-        return 3;
-    } else {
-        return 4;
-    }
-}
-
 function buildSeason(player, team, season) {
     return {
         "id": season.id,
@@ -51,7 +26,7 @@ function buildSeason(player, team, season) {
         "captain": team.name,
         "role": player.role,
         "rank": player.rank,
-        "place": identifyPlace(team.name, season.finalist),
+        "place": team.place | null,
     }
 }
 
@@ -61,7 +36,6 @@ function buildMemberStatistics(archives) {
             "id": arch.id,
             "date": arch.data.date,
             "teams": arch.data.teams,
-            "finalist": arch.finalist,
         }
     })
     archives.forEach((season) => {
@@ -86,4 +60,4 @@ function getMemberInfo(id) {
     }
 }
 
-export { getMemberInfo, buildMemberStatistics, identifyPlace };
+export { getMemberInfo, buildMemberStatistics };

@@ -1,9 +1,9 @@
-import { writable } from 'svelte/store';
-import { collection, setDoc, getDocs, doc, getDoc } from "firebase/firestore";
+import { writable, get } from 'svelte/store';
+import { collection, setDoc, getDocs, doc } from "firebase/firestore";
 import { db } from './firebase-init'
 import { importJSON } from './importer'
 import { is_empty } from "svelte/internal";
-import { buildMemberStatistics, identifyPlace } from "./statistics";
+import { buildMemberStatistics } from "./statistics";
 
 async function saveArchive(tourName, archive) {
 	try {
@@ -18,15 +18,6 @@ async function saveArchive(tourName, archive) {
 	}
 }
 
-async function loadArchive(tourName) {
-	try {
-		const docRef = doc(db, "archives", tourName);
-		return (await getDoc(docRef)).data();
-	} catch (e) {
-		console.error("Error adding document: ", e);
-	}
-}
-
 let archiveCache = {};
 
 function unsafeRetrieveArchive(id) {
@@ -34,8 +25,8 @@ function unsafeRetrieveArchive(id) {
 }
 
 function reloadArchive(id) {
-	if (id in archiveCache) {
-		currentArchiveStore.set(archiveCache[id]);
+	if (id != null && id.toLowerCase() in archiveCache) {
+		currentArchiveStore.set(archiveCache[id.toLowerCase()]);
 	} else {
 		loadAllArchives().then((result) => {
 			currentArchiveStore.set(result[0]);
@@ -50,10 +41,7 @@ async function loadAllArchives() {
 			const result = query.docs
 				.map((doc) => doc.data())
 				.sort((x, y) => new Date(x.data.date) < new Date(y.data.date) ? 1 : -1);
-			result.forEach((season) => season.data.teams.map((team) => {
-					team.place = identifyPlace(team.name, season.finalist)
-				}))
-			archiveCache = result.reduce((map, doc) => (map[doc.id] = doc, map), {})
+			archiveCache = result.reduce((map, doc) => (map[doc.id.toLowerCase()] = doc, map), {})
 			archiveIdListStore.set(result.map((doc) => {
 				return {
 					"id": doc.id,
@@ -68,9 +56,38 @@ async function loadAllArchives() {
 	}
 }
 
+function bnetReduction(id) {
+	return id.split('#')[0]
+}
+
+function updateArchiveWithPlaces(challongeMap) {
+	const currentArchive = get(currentArchiveStore);
+	currentArchive.data.teams.map((team) => {
+		const foundTeam = challongeMap[bnetReduction(team.name).toLowerCase()]
+		if (foundTeam) {
+			team.place = foundTeam.place
+		} else {
+			team.place = null
+		}
+	});
+	currentArchiveStore.set(currentArchive);
+}
+
 async function importArchive() {
 	await importJSON((jsonData) => {
 		currentArchiveStore.set(JSON.parse(jsonData));
+	});
+}
+
+async function importChallonge() {
+	await importJSON((jsonData) => {
+		const challongeMap = JSON.parse(jsonData).map((doc) => {
+			return {
+				"name": doc.participant.display_name,
+				"place": doc.participant.final_rank,
+			}
+		}).reduce((map, doc) => (map[doc.name.toLowerCase()] = doc, map), {})
+		updateArchiveWithPlaces(challongeMap)
 	});
 }
 
@@ -88,6 +105,7 @@ export {
 	reloadArchive,
 	saveArchive,
 	importArchive,
+	importChallonge,
 	loadAllArchives,
 	unsafeRetrieveArchive
 };

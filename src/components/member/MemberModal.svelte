@@ -35,7 +35,7 @@
     header={memberInfo.name}
     isOpen={isModelOpen}
     toggle={toggleModal}
-    fullscreen="lg"
+    size="lg"
 >
     <Table striped>
         <thead>
@@ -43,9 +43,9 @@
                 <th>#</th>
                 <th></th>
                 <th></th>
-                <th></th>
-                <th>Team</th>
+                <th>Division</th>
                 <th>Score</th>
+                <th>Team</th>
             </tr>
         </thead>
         <tbody>
@@ -74,8 +74,8 @@
                     <td><svelte:component this={getRoleIcon(season.role)} /></td
                     >
                     <td><Division rank={season.rank} /></td>
-                    <td><strong>{season.captain}</strong></td>
                     <td><Medal place={season.place} /></td>
+                    <td><strong>{season.captain}</strong></td>
                 </tr>
             {/each}
         </tbody>

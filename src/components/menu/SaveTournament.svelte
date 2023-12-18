@@ -19,8 +19,7 @@
     let tournamentIdValue = "";
 
     afterUpdate(() => {
-        archive.finalist = "finalist" in archive ? archive.finalist : {};
-        tournamentIdValue = "id" in archive ? archive.id : "";
+        tournamentIdValue = "id" in archive ? archive.id : tournamentIdValue;
     });
 
     let isLoading = false;
@@ -49,24 +48,6 @@
                 id="tournamentId"
                 placeholder="tournament number or name"
                 bind:value={tournamentIdValue}
-            />
-            <Label for="number">First place</Label>
-            <Input
-                id="first_place"
-                placeholder="full team name"
-                bind:value={archive.finalist.first_place}
-            />
-            <Label for="number">Second place</Label>
-            <Input
-                id="second_place"
-                placeholder="full team name"
-                bind:value={archive.finalist.second_place}
-            />
-            <Label for="number">Third place</Label>
-            <Input
-                id="third_place"
-                placeholder="full team name"
-                bind:value={archive.finalist.third_place}
             />
         </FormGroup>
 

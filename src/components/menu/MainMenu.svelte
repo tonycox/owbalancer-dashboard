@@ -11,7 +11,7 @@
 	import SaveTournament from "./SaveTournament.svelte";
 	import LoginModal from "./LoginModal.svelte";
 
-	import { reloadArchive, importArchive } from "../../func/store.js";
+	import { reloadArchive, importArchive, importChallonge } from "../../func/store.js";
 	import { formatDate } from "../../func/dates.js";
 
 	export let archive;
@@ -31,7 +31,8 @@
 
 <ButtonGroup>
 	{#if isAdmin}
-		<Button on:click={importArchive}>Import</Button>
+		<Button on:click={importArchive}>Import Balancer</Button>
+		<Button on:click={importChallonge}>Import Challonge</Button>
 		<Button on:click={saveToggle}>Save</Button>
 	{/if}
 	{#if !isAdmin}

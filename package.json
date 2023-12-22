@@ -25,6 +25,7 @@
     "bootstrap-icons": "^1.11.1",
     "firebase": "^10.6.0",
     "sirv-cli": "^2.0.0",
+    "svelte-persisted-store": "^0.8.0",
     "sveltestrap": "^5.11.2"
   }
 }

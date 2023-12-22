@@ -4,30 +4,38 @@
     import Division from "../../icons/Division.svelte";
     import Medal from "../../icons/Medal.svelte";
 
+    import { preferences } from "../../func/localstore";
     import { allPlayersStore, getMemberInfo } from "../../func/statistics.js";
     import { sortByPlace } from "../../func/placement";
 
     let players = [];
 
     allPlayersStore.subscribe((value) => {
-        players = sortByPlace(value, (p) => {return p.latest_score});
+        players = sortByPlace(value, (p) => {
+            return p.latest_score;
+        });
     });
 
-    let clickedPlayer = null;
+    let sekectedPlayer = null;
     let isModelOpen = false;
     const toggleModal = () => (isModelOpen = !isModelOpen);
+
+    let tableClass = null;
+    preferences.subscribe((value) => {
+        tableClass = value.theme === "dark" ? "table-dark" : "table-light";
+    });
 </script>
 
-{#if clickedPlayer}
+{#if sekectedPlayer}
     <MemberModal
-        memberInfo={getMemberInfo(clickedPlayer.name)}
+        memberInfo={getMemberInfo(sekectedPlayer.name)}
         {isModelOpen}
         {toggleModal}
     />
 {/if}
 
 <div>
-    <Table hover striped>
+    <Table hover striped responsive={false} size="sm" class={tableClass}>
         <thead>
             <tr>
                 <th>BTag</th>
@@ -40,10 +48,11 @@
         </thead>
         <tbody>
             {#each players as player}
-                <tr class="player"
+                <tr
+                    class="player"
                     on:mousedown={() => {
                         toggleModal();
-                        clickedPlayer = player;
+                        sekectedPlayer = player;
                     }}
                 >
                     <th scope="row">{player.name}</th>

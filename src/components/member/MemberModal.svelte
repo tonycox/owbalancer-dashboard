@@ -4,6 +4,7 @@
     import Medal from "../../icons/Medal.svelte";
     import MemberEntry from "./MemberEntry.svelte";
 
+    import { preferences } from "../../func/localstore";
     import { formatDate } from "../../func/dates.js";
     import { unsafeRetrieveArchive } from "../../func/store.js";
     import { getRoleIcon } from ".";
@@ -15,6 +16,13 @@
     function sortById(seasons) {
         return seasons.sort((a, b) => b.id.localeCompare(a.id));
     }
+
+    let tableClass = null;
+    let modalClass = null;
+    preferences.subscribe((value) => {
+        tableClass = value.theme === "dark" ? "table-dark" : "table-light";
+        modalClass = value.theme === "dark" ? "bg-dark" : "bg-light";
+    });
 
     const poppedSeasons = {};
 
@@ -35,14 +43,16 @@
     header={memberInfo.name}
     isOpen={isModelOpen}
     toggle={toggleModal}
+    returnFocusAfterClose={false}
     size="lg"
+    contentClassName={modalClass}
 >
-    <Table striped>
+    <Table hover striped responsive={false} class={tableClass}>
         <thead>
             <tr>
                 <th>#</th>
                 <th></th>
-                <th></th>
+                <th>Role</th>
                 <th>Division</th>
                 <th>Score</th>
                 <th>Team</th>
@@ -84,7 +94,7 @@
 
 <style>
     .modal-tr:hover {
-        box-shadow: 0 0 15px rgba(16, 33, 7, 0.2);
+        /* box-shadow: 0 0 15px rgba(16, 33, 7, 0.2); */
         cursor: pointer;
     }
 </style>

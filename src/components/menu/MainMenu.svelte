@@ -11,6 +11,7 @@
 	import SaveTournament from "./SaveTournament.svelte";
 	import LoginModal from "./LoginModal.svelte";
 
+	import { preferences } from "../../func/localstore";
 	import { reloadArchive, importArchive, importChallonge } from "../../func/store.js";
 	import { formatDate } from "../../func/dates.js";
 
@@ -24,6 +25,10 @@
 	let isLoginModalOpen = false;
 	const loginToggle = () => (isLoginModalOpen = !isLoginModalOpen);
 
+	let buttonClass = null;
+    preferences.subscribe((value) => {
+        buttonClass = value.theme === "dark" ? "light" : "dark";
+    });
 </script>
 
 <SaveTournament {archive} isOpen={isSaveModalOpen} toggle={saveToggle} />
@@ -31,17 +36,17 @@
 
 <ButtonGroup>
 	{#if isAdmin}
-		<Button on:click={importArchive}>Import Balancer</Button>
-		<Button on:click={importChallonge}>Import Challonge</Button>
-		<Button on:click={saveToggle}>Save</Button>
+		<Button color={buttonClass} on:click={importArchive}>Import Balancer</Button>
+		<Button color={buttonClass} on:click={importChallonge}>Import Challonge</Button>
+		<Button color={buttonClass} on:click={saveToggle}>Save</Button>
 	{/if}
 	{#if !isAdmin}
-		<Button on:click={loginToggle}>Admin</Button>
+		<Button color={buttonClass} on:click={loginToggle}>Admin</Button>
 	{/if}
 
 	{#if availableIdList.length > 0}
 		<ButtonDropdown>
-			<DropdownToggle caret>
+			<DropdownToggle caret color={buttonClass}>
 				Tournament # {archive.id} ({formatDate(archive.data.date)})
 			</DropdownToggle>
 			<DropdownMenu>

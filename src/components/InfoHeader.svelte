@@ -1,6 +1,6 @@
 <script>
-    import OWIcon from "../icons/OW.svelte";
-
+	import OWIcon from "../icons/OW.svelte";
+	import DarkMode from "./DarkMode.svelte";
 </script>
 
 <div class="d-flex justify-content-between">
@@ -9,6 +9,7 @@
 		<h3 class="ms-2">Tournament Boards</h3>
 	</div>
 	<div>
+		<DarkMode />
 		<span>
 			Created by
 			<a target="blank" href="https://github.com/tonycox">tonycox</a>

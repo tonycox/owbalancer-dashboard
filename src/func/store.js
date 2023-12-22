@@ -56,14 +56,14 @@ async function loadAllArchives() {
 	}
 }
 
-function bnetReduction(id) {
+function btagReduction(id) {
 	return id.split('#')[0]
 }
 
 function updateArchiveWithPlaces(challongeMap) {
 	const currentArchive = get(currentArchiveStore);
 	currentArchive.data.teams.map((team) => {
-		const foundTeam = challongeMap[bnetReduction(team.name).toLowerCase()]
+		const foundTeam = challongeMap[btagReduction(team.name).toLowerCase()]
 		if (foundTeam) {
 			team.place = foundTeam.place
 		} else {

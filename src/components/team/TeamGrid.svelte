@@ -1,6 +1,7 @@
 <script>
 	import Team from "./Team.svelte";
-	import { sortByPlace, adjustPlacementBorder } from ".";
+	import { adjustPlacementBorder } from ".";
+	import { sortByPlace } from "../../func/placement";
 
 	export let teams;
 

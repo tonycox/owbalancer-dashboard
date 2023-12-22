@@ -1,3 +1,6 @@
+import { writable } from 'svelte/store';
+import { sortByPlace } from "./placement";
+
 class ExtendedMap extends Map {
     get(key) {
         if (!this.has(key)) {
@@ -17,7 +20,7 @@ let memberStatistcsCache = new ExtendedMap(() => {
         "name": null,
         "seasons": []
     }
-});
+})
 
 function buildSeason(player, team, season) {
     return {
@@ -26,7 +29,7 @@ function buildSeason(player, team, season) {
         "captain": team.name,
         "role": player.role,
         "rank": player.rank,
-        "place": team.place | null,
+        "place": team.place ? team.place : null,
     }
 }
 
@@ -49,7 +52,8 @@ function buildMemberStatistics(archives) {
                 }
             })
         })
-    });
+    })
+    buildAllPlayerTable(memberStatistcsCache);
 }
 
 function getMemberInfo(id) {
@@ -60,4 +64,24 @@ function getMemberInfo(id) {
     }
 }
 
-export { getMemberInfo, buildMemberStatistics };
+const allPlayersStore = writable(
+    {}
+)
+
+function buildAllPlayerTable(memberStatistcs) {
+    let allPlayers = []
+    for (let [_, player] of memberStatistcs) {
+        const lastSeason = player.seasons.sort((x, y) => new Date(x.date) < new Date(y.date) ? 1 : -1)[0]
+        allPlayers.push({
+            "name": player.name,
+            "tournaments_played": player.seasons.length,
+            "highest_score": sortByPlace(player.seasons)[0].place,
+            "highest_div": player.seasons.sort((a, b) => b.rank - a.rank)[0].rank,
+            "latest_score": lastSeason.place,
+            "latest_div": lastSeason.rank,
+        })
+    }
+    allPlayersStore.set(allPlayers);
+}
+
+export { getMemberInfo, buildMemberStatistics, allPlayersStore }
